@@ -1,0 +1,75 @@
+# CC1 — Neural Networks: Scikit-learn vs TensorFlow/Keras
+
+Machine Learning project comparing two frameworks on the **same problems**:
+
+| Notebook | Task | Dataset | Scikit-learn | TensorFlow/Keras |
+|---|---|---|---|---|
+| `CC1_Iris.ipynb` | Classification (3 classes) | Iris | `MLPClassifier` | `Sequential` + `Dense` |
+| `CC1_House_Prices.ipynb` | Regression (price prediction) | Housing | `MLPRegressor` | `Sequential` + `Dense` |
+
+The notebooks are written in French, step by step, with commented code aimed at students.
+
+## Project structure
+
+```text
+CC1/
+├── CC1_Iris.ipynb
+├── CC1_House_Prices.ipynb
+├── requirements.txt
+├── README.md
+└── Dataset/
+    ├── Housing.csv
+    └── iris.csv
+```
+
+## Architectures
+
+| Notebook | Scikit-learn | Keras |
+|---|---|---|
+| Iris | 4 → 10 → 10 → 3 | 4 → Dense(16, ReLU) → Dense(8, ReLU) → Dense(3, Softmax) |
+| House Prices | n → 64 → 32 → 1 | n → Dense(64) → Dense(32) → Dense(16) → Dense(1) (ReLU hidden layers) |
+
+## Results
+
+Values obtained in one execution of the notebooks (they may vary slightly with your machine and library versions).
+
+**Iris** — metric: accuracy (30 test samples)
+
+| Model | Framework | Accuracy |
+|---|---|---:|
+| MLPClassifier | Scikit-learn | 0.9667 |
+| Neural Network | TensorFlow/Keras | 0.9333 |
+
+The gap is a single flower out of 30, so both models perform essentially the same.
+
+**House Prices** — metrics: MAE, RMSE, R² (109 test samples, prices in original units)
+
+| Model | Framework | MAE | RMSE | R² |
+|---|---|---:|---:|---:|
+| MLPRegressor | Scikit-learn | 1,041,123 | 1,374,433 | 0.6263 |
+| Neural Network | TensorFlow/Keras | 1,003,892 | 1,353,910 | 0.6373 |
+
+Keras is slightly better on all three metrics, but the difference is small. Accuracy is deliberately **not** used here since this is a regression problem.
+
+## Notes on the data
+
+- The housing file is `Housing.csv` (545 houses), whose target column is `price` (not `SalePrice` as in the Kaggle *House Prices — Advanced Regression* `train.csv`). The approach is identical.
+- The yes/no columns are converted to 0/1 and `furnishingstatus` is one-hot encoded, giving 13 numeric features. Missing values would be filled with the median (there are none in this file).
+- Both features and target are standardized for training; predictions are converted back to real prices before computing metrics.
+
+## Getting started
+
+```bash
+git clone <your-repo-url>
+cd CC1
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+jupyter notebook
+```
+
+Run the notebooks **from the `CC1/` folder** so the path `Dataset/Housing.csv` resolves correctly. Then open `CC1_Iris.ipynb` or `CC1_House_Prices.ipynb` and use *Run All*.
+
+## Tech stack
+
+Python · NumPy · pandas · Matplotlib · scikit-learn · TensorFlow/Keras · Jupyter
